@@ -7,6 +7,7 @@ import hudson.security.ACL;
 
 import java.io.IOException;
 import java.util.logging.Level;
+import java.util.List;
 import jenkins.model.Jenkins;
 
 import org.acegisecurity.Authentication;
@@ -58,7 +59,8 @@ public class PeriodicBackupPlugin extends Plugin {
         if (recorder == null) {
           Jenkins.getActiveInstance().getLog().doNewLogRecorder(current);
           recorder = Jenkins.getActiveInstance().getLog().getLogRecorder(current);
-          recorder.targets.add(new Target(current, level));
+          List<Target> targets = recorder.getLoggers();
+          targets.add(new Target(current, level));
 
           try {
             recorder.save();
@@ -72,7 +74,7 @@ public class PeriodicBackupPlugin extends Plugin {
         // Find Target with the specified name according to LogRecorder.
         Target target = null;
         if (current != null) {
-          for (Target currTarg : recorder.targets) {
+          for (Target currTarg : recorder.getLoggers()) {
             if (currTarg.name.equals(current)) {
               target = currTarg;
               break;
@@ -81,7 +83,7 @@ public class PeriodicBackupPlugin extends Plugin {
         }
 
         if (target == null) {
-          recorder.targets.add(new Target(current, level));
+          recorder.getLoggers().add(new Target(current, level));
           try {
             recorder.save();
           } catch (IOException ex) {
