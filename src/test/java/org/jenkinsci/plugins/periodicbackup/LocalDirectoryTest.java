@@ -68,7 +68,7 @@ public class LocalDirectoryTest {
     public void testRetrieveBackupFromLocation() throws Exception {
         File sourceDir = new File(Thread.currentThread().getContextClassLoader().getResource("data/").getFile());
         File tempDirectory = new File(Thread.currentThread().getContextClassLoader().getResource("data/temp").getFile());
-        Date testDate = new Date(123-(Calendar.getInstance().get(Calendar.ZONE_OFFSET)));
+        Date testDate = new Date(123- Calendar.getInstance().get(Calendar.ZONE_OFFSET) - Calendar.getInstance().get(Calendar.DST_OFFSET));
         LocalDirectory localDirectory = new LocalDirectory(sourceDir, true);
         BackupObject backupObject = new BackupObject(new FullBackup("", "", false), new ZipStorage(false, 0), localDirectory, testDate);
 
